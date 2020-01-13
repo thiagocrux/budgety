@@ -1,7 +1,6 @@
 /* BUDGET CONTROLLER */
 
 var budgetController = (function() {
-
     var Expense = function(id, description, value) {
         this.id = id;
         this.description = description;
@@ -82,7 +81,6 @@ var budgetController = (function() {
         },
 
         calculateBudget: function() {
-
             // Calculate the total income and expenses
             calculateTotal('exp');
             calculateTotal('inc');
@@ -112,13 +110,11 @@ var budgetController = (function() {
             console.log(data);
         }
     };
-
 })();
 
 /* UI CONTROLLER */
 
 var UIController = (function() {
-
     var DOMStrings = {
         inputType: '.add__type',
         inputDescription: '.add__description',
@@ -165,6 +161,12 @@ var UIController = (function() {
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
 
+        deleteListItem: function(selectorID) {
+            var el = document.getElementById(selectorID);
+
+            el.parentNode.removeChild(el);
+        },
+
         clearFields: function() {
             var fields;
 
@@ -182,7 +184,6 @@ var UIController = (function() {
         },
 
         displayBudget: function(obj) {
-
             document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
             document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
             document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
@@ -204,7 +205,6 @@ var UIController = (function() {
 /* GLOBAL APP CONTROLLER */
 
 var controller = (function(budgetCtrl, UICtrl) {
-
     var setupEventListeners = function() {
         // Receive the object containing all DOM related strings.
         var DOM = UICtrl.getDOMStrings();
@@ -221,7 +221,6 @@ var controller = (function(budgetCtrl, UICtrl) {
     };
 
     var updateBudget = function() {
-
         // 1. Calculate the budget
         budgetCtrl.calculateBudget();
 
@@ -230,7 +229,6 @@ var controller = (function(budgetCtrl, UICtrl) {
 
         // 3. Display the budget on the UI
         UICtrl.displayBudget(budget);
-
     };
 
     var ctrlAddItem = function() {
@@ -256,7 +254,6 @@ var controller = (function(budgetCtrl, UICtrl) {
 
             // 5. Calculate and update budget
             updateBudget();
-
         }
     }
 
@@ -275,28 +272,25 @@ var controller = (function(budgetCtrl, UICtrl) {
             // 1. Delete the item from the data structure
             budgetController.deleteItem(type, ID);
 
-
             // 2. Delete the item from the UI
-
-
+            UICtrl.deleteListItem(itemID);
 
             // 3. Update and show the new budget
-
-
-
+            updateBudget();
         }
-
     };
 
     return {
         init: function() {
             console.log('Application has started...');
+
             UICtrl.displayBudget({
                 budget: 0,
                 totalInc: 0,
                 totalExp: 0,
                 percentage: -1
             });
+
             setupEventListeners();
         }
     }
